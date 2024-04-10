@@ -9,7 +9,7 @@ const dumpToFile = async (path: string) => {
   console.log("Dumping DB to file...");
 
   await new Promise((resolve, reject) => {
-    const command = `mysqldump --user=${env.DATABASE.MYSQL_USERNAME} --password=${env.DATABASE.MYSQL_PASSWORD} --host=${env.DATABASE.MYSQL_HOST} --port=${env.DATABASE.MYSQL_PORT}  --single-transaction --routines --triggers --databases ${env.DATABASE.MYSQL_DATABASE} > ${path}`;
+    const command = `mysqldump --user=${env.DATABASE.MYSQL_USERNAME} --password=${env.DATABASE.MYSQL_PASSWORD} --host=${env.DATABASE.MYSQL_HOST} --port=${env.DATABASE.MYSQL_PORT} --default-character-set=utf8mb4  --single-transaction --routines --triggers --databases ${env.DATABASE.MYSQL_DATABASE} > ${path}`;
     exec(command, (error, _, stderr) => {
       if (error) {
         reject({ error: JSON.stringify(error), stderr });
@@ -39,14 +39,11 @@ const deleteFile = async (path: string) => {
 
 export const backup = async () => {
   console.log("Initiating DB backup...");
-  let fileTag ='backup';
+  let fileTag ='database-backup';
   let date = new Date()
-  let oldDate = new Date(date.getTime() - 7 * 24 * 60 * 60 * 1000);
-  let fileToDelete = `backup-${oldDate.toISOString().replace(/[:.]+/g, "-")}.sql`;
-  const timestamp = date.toISOString().replace(/^[T]/g, "-");
+  const timestamp = date.toISOString().replace(/[:.]+/g, "-");
   const filename = `backup-${timestamp}.sql`;
 
-  console.log(filename,  date.toISOString());
   const filepath = process.platform === 'win32' ? `./tmp/${filename}` : `/tmp/${filename}`;
 
   try {
