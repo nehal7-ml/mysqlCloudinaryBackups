@@ -65,4 +65,3 @@ export const backup = async () => {
   console.log("DB backup complete...");
 };
 
-backup()
