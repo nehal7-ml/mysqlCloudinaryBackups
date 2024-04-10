@@ -2,9 +2,9 @@
   "name": "cloudinary",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "start": "bun ./src/backup.ts"
+    "start": "bun ./src/index.ts"
   },
   "keywords": [],
   "author": "",
