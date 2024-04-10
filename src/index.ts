@@ -2,7 +2,7 @@ import { CronJob } from "cron";
 import { backup } from "./backup";
 import env from "./config";
 
-const job = new CronJob(env.DEFAULT_CRON_SCHEDULE, async () => {
+const job = new CronJob(env.CRON_SCHEDULE.MONTHLY, async () => {
   try {
     await backup();
   } catch (error) {
