@@ -1,26 +1,9 @@
-import { v2 as cloudinary } from "cloudinary";
 import { unlink } from "fs";
 import { exec } from "child_process";
 import env from "./config";
+import { cleanupOldAssets, deleteFromCloudinary, uploadToCloudinary } from "./cloudinary";
+import yn from 'yn';
 
-cloudinary.config({
-  cloud_name: env.CLOUDINARY.CLOUD_NAME,
-  api_key: env.CLOUDINARY.API_KEY,
-  api_secret: env.CLOUDINARY.API_SECRET,
-});
-
-const uploadToCloudinary = async ({ name, path }: { name: string, path: string }) => {
-  console.log("Uploading backup to Cloudinary...");
-  const date = new Date();
-
-  await cloudinary.uploader.upload(path, {
-    public_id: name,
-    resource_type: 'auto',
-    folder: `databaseBackups/${date.getFullYear()}/Month-${date.getMonth() + 1}`,
-  });
-
-  console.log("Backup uploaded to Cloudinary...");
-};
 
 const dumpToFile = async (path: string) => {
   console.log("Dumping DB to file...");
@@ -56,19 +39,30 @@ const deleteFile = async (path: string) => {
 
 export const backup = async () => {
   console.log("Initiating DB backup...");
-
-  let date = new Date().toISOString();
-  const timestamp = date.replace(/[:.]+/g, "-");
+  let fileTag ='backup';
+  let date = new Date()
+  let oldDate = new Date(date.getTime() - 7 * 24 * 60 * 60 * 1000);
+  let fileToDelete = `backup-${oldDate.toISOString().replace(/[:.]+/g, "-")}.sql`;
+  const timestamp = date.toISOString().replace(/^[T]/g, "-");
   const filename = `backup-${timestamp}.sql`;
-  const filepath = `/tmp/${filename}`;
+
+  console.log(filename,  date.toISOString());
+  const filepath = process.platform === 'win32' ? `./tmp/${filename}` : `/tmp/${filename}`;
 
   try {
     await dumpToFile(filepath);
-    await uploadToCloudinary({ name: filename, path: filepath });
+    await uploadToCloudinary({ name: filename, path: filepath, tag: fileTag });
+
     await deleteFile(filepath);
+
+    if(yn(env.CLOUDINARY.DELETE_OLD)) {
+      await cleanupOldAssets(fileTag);
+    }
   } catch (error) {
     console.log('An error ocurred!', error);
   }
 
   console.log("DB backup complete...");
 };
+
+backup()

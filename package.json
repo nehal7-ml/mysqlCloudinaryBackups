@@ -4,16 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/index.js",
-    "build": "tsc"
+    "start": "bun ./src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@cloudflare/workers-types": "^4.20240405.0",
+    "cloudflare": "^3.0.0",
     "cloudinary": "^1.37.3",
     "cron": "^2.3.1",
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "yn": "^5.0.0"
   },
   "devDependencies": {
     "@types/cron": "^2.0.1",

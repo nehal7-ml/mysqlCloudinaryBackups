@@ -14,6 +14,11 @@ const config = {
     CLOUD_NAME: env.CLOUD_NAME,
     API_KEY: env.API_KEY,
     API_SECRET: env.API_SECRET,
+    DELETE_OLD: env.DELETE_OLD
+  },
+  CLOUDFLARE: {
+    MY_BUCKET_NAME: env.MY_BUCKET_NAME,
+
   },
   CRON_SCHEDULE: {
     DAILY: '0 1 * * *', //daily at 01 AM
