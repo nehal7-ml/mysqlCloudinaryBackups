@@ -113,6 +113,7 @@ export async function cleanupOldAssets(tag: string) {
 // uploadToCloudinary({ name: 'database-backup4', path: 'tmp/backup-1.sql', tag: 'database-backup' })
 
 //cleanupOldAssets('database-backup')
-//listAssets('database-backup')
+// console.log(process.env.NODE_ENV);
+// listAssets('database-backup')
 
 export { uploadToCloudinary, deleteFromCloudinary };

@@ -9,13 +9,13 @@
         }
       }
     },
-    "buildCommand": "bun install"
+    "buildCommand": null
   },
   "deploy": {
     "numReplicas": 1,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10,
-    "cronSchedule": "0 6 1 * *",
+    "cronSchedule": "*/15 * * * *",
     "startCommand": "bun start"
   }
 }
