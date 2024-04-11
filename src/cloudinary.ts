@@ -48,7 +48,7 @@ async function listAssets(tag: string) {
       .max_results(100)
       .execute();
 
-    console.log(result.total_count);
+    console.log(result);
     return result.resources;
   } catch (error) {
     console.error("Error listing assets:", error);
